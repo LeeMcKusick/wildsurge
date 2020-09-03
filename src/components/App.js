@@ -5,10 +5,11 @@ import Navbar from 'react-bootstrap/Navbar';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
+import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 
 import Sorcerer from './Sorcerer';
-
+import sourceOptions from '../data/sourceOptions.json';
 //import logo from '../logo.svg';
 import '../styles/App.css';
 
@@ -19,17 +20,33 @@ class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      surges: []
+      surges: [],
+      source: "phb"
     };
   }
 
   surge = () => {
-    let newSurges = this.state.surges.concat('new value');
+    let newSurges = this.state.surges.concat(this.state.source);
     this.setState({ surges: newSurges });
   }
 
   clearList = () => {
     this.setState({ surges: [] });
+  }
+
+  getSourceOptions = (option) => {
+    return sourceOptions.map((i) => 
+        <option value={i.name} key={i.name}>{i.label}</option>
+    );
+  };
+
+  handleSourceChange = (event) => {
+    //const target = event.currentTarget;
+    //const value = target.value;
+    //const name = target.name;
+    this.setState({
+      source: event.currentTarget.value
+    });
   }
 
   render() {
@@ -42,10 +59,15 @@ class App extends React.Component {
         <Container>
           <hr></hr>
           <Row>
-            <Col sm={8}>
+            <Col sm={6}>
+            <Form.Control as="select" name="source" onChange={this.handleSourceChange}>
+              {this.getSourceOptions()}
+            </Form.Control>
+            </Col>
+            <Col sm={3}>
               <Button block onClick={() => this.surge()}>SURGE!</Button>
             </Col>
-            <Col sm={4}>
+            <Col sm={3}>
               <Button variant="outline-primary" block onClick={() => this.clearList()}>CLEAR</Button>
             </Col>
 
